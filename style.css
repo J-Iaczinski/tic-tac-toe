@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: monospace;
+}
+
+.square {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  height: 120px;
+  width: 120px;
+  border: 2px solid rgba(255, 255, 255, 0.267);
+
+  font-size: 6em;
+
+  transition: 0.25s;
+}
+
+h1 {
+  color: white;
+}
+
+.gameboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: calc((120px + 5px) * 3);
+  color: rgba(255, 255, 255, 0.497);
+  cursor: pointer;
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.controllers {
+  margin-top: 20px;
+}
+
+body {
+  background-color: rgb(15, 25, 68);
+}
+
+button {
+  height: 40px;
+  padding: 10px;
+  background-color: bisque;
+  border-radius: 15px;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.35s;
+}
+
+input {
+  height: 40px;
+  padding: 10px;
+  background-color: rgb(255, 255, 254);
+  border-radius: 15px;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgb(228, 194, 153);
+}
+
+.square:hover {
+  background-color: rgb(19, 31, 85);
+}
