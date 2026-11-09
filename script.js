@@ -5,7 +5,7 @@ const gameboard = (function () {
   const createBoard = (size = 9) => {
     board = [];
     for (let i = 0; i < size; i++) {
-      board.push(' ');
+      board.push('');
     }
   };
 
