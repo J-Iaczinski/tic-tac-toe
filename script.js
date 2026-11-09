@@ -5,7 +5,7 @@ const gameboard = (function () {
   const createBoard = (size = 9) => {
     board = [];
     for (let i = 0; i < size; i++) {
-      board.push('');
+      board.push(' ');
     }
   };
 
@@ -19,13 +19,19 @@ const gameboard = (function () {
   };
 
   const printBoard = () => {
-    console.log(`
-      ${board[0]} | ${board[1]} | ${board[2]}
-      ---------
-      ${board[3]} | ${board[4]} | ${board[5]}
-      ---------
-      ${board[6]} | ${board[7]} | ${board[8]}
-      `);
+    // console.log(`
+    //   ${board[0]} | ${board[1]} | ${board[2]}
+    //   ---------
+    //   ${board[3]} | ${board[4]} | ${board[5]}
+    //   ---------
+    //   ${board[6]} | ${board[7]} | ${board[8]}
+    //   `);
+
+    //now the print board will print the X or O on the DOM
+    const boardCell = document.querySelectorAll('.board-container > div');
+    boardCell.forEach((cell) => {
+      cell.textContent = board[cell.id];
+    });
   };
 
   const checkTie = () => {
@@ -66,6 +72,7 @@ const Player = (function () {
   let players = [];
   const createPlayer = (name) => {
     if (players.length >= 2) {
+      alert('the maximum number of players are 2');
       throw new Error('the maximum number of players are 2');
     }
 
@@ -96,56 +103,82 @@ const GameController = (function () {
 
   const resetGame = () => {
     gameboard.createBoard();
+    gameboard.printBoard();
     activePlayer = 0;
   };
 
   const playerMove = (index) => {
-    // First the game controller need to know what player is playing
-    // If its 'player[0]' = X and after the move we need to advance to player[1]
-    // after each move checkWin for the X or O depending on who played last.
-    let currentPlayer = getCurrentPlayer();
+    const currentPlayer = getCurrentPlayer();
 
     const wasMarked = gameboard.setMarker(index, currentPlayer.marker);
 
-    if (wasMarked) {
-      gameboard.printBoard();
-      if (gameboard.checkWin(currentPlayer.marker)) {
-        console.log(`Congratulations ${currentPlayer.name} Won the Game!`);
-        console.log(`Reseting the board...`);
-        GameController.resetGame();
-      } else if (gameboard.checkTie()) {
-        console.log('The game is tied!');
-        console.log('Reseting the board...');
-        GameController.resetGame();
-      } else {
-        switchPlayer();
-      }
+    if (!wasMarked) return;
+
+    gameboard.printBoard();
+
+    if (gameboard.checkWin(currentPlayer.marker)) {
+      setTimeout(() => {
+        alert(`Congratulations ${currentPlayer.name} Won the Game!`);
+        resetGame();
+      }, 50);
+      return;
     }
+
+    if (gameboard.checkTie()) {
+      setTimeout(() => {
+        alert('The game is tied!');
+        resetGame();
+      }, 50);
+      return;
+    }
+
+    switchPlayer();
   };
 
   return { playerMove, resetGame };
 })();
 
-const p1 = Player.createPlayer('josh');
-const p2 = Player.createPlayer('miguel');
-
 gameboard.createBoard();
 gameboard.printBoard();
 
-GameController.playerMove(0);
+const domHandler = (function () {
+  const createPlayerDOM = () => {
+    const player1 = document.querySelector('#player1');
 
-GameController.playerMove(1);
+    const player2 = document.querySelector('#player2');
 
-GameController.playerMove(2);
+    const startGame = document.querySelector('#startGame');
+    startGame.addEventListener('click', () => {
+      //checking if the player 1 and 2 exist
+      if (!player2.value || !player1.value) {
+        alert('You must enter the name of the players');
+        return;
+      }
+      Player.createPlayer(player1.value);
+      Player.createPlayer(player2.value);
+      console.log(Player.getPlayers());
+    });
+  };
 
-GameController.playerMove(4);
+  const printMove = () => {
+    // first thing is verify if the players array exist
+    const boardCell = document.querySelectorAll('.board-container > div');
+    boardCell.forEach((cell) => {
+      cell.addEventListener('click', () => {
+        if (Player.getPlayers().length !== 2) {
+          alert(
+            'You must insert the name of 2 players to be able to play the game',
+          );
+          return;
+        }
 
-GameController.playerMove(3);
+        GameController.playerMove(Number(cell.id));
+      });
+    });
+  };
 
-GameController.playerMove(5);
+  return { createPlayerDOM, printMove };
+})();
 
-GameController.playerMove(7);
-
-GameController.playerMove(6);
-
-GameController.playerMove(8);
+domHandler.createPlayerDOM();
+domHandler.printMove();

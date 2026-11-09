@@ -41,7 +41,9 @@ body {
   display: grid;
   gap: 5px;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, minmax(0, 1fr));
   width: min(90vw, 450px);
+  height: auto;
   aspect-ratio: 1 / 1;
 
   justify-content: center;
@@ -53,6 +55,9 @@ body {
   border-radius: 5px;
   transition: ease 0.15s;
   cursor: pointer;
+
+  min-width: 0;
+  min-height: 0;
 }
 
 .board-container > div:hover {
